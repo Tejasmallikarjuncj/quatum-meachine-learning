@@ -37,7 +37,7 @@ sample = {'s1':[],'s2':[],'s3':[],'s4':[],'s5':[],'s6':[]}
 fitt = {'s1':[],'s2':[],'s3':[],'s4':[],'s5':[],'s6':[]}
 
 #The population size is 6
-for i in range(6,12):
+for i in range(1,7):
     m,c = line.gradient_decent(i*10)
     theta['samp'+str(i-5)] = round(2*np.arctan(round(m,3)),3)    
     sample['s'+str(i-5)].append(round(np.arctan(round(m,3)),3))
