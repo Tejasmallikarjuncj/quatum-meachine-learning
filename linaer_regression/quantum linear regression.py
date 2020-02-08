@@ -110,3 +110,23 @@ for i in range(1,7,2):
 #the final optimized sample are
 print("The sample",sample)
 print("the optimium solution", 0.867)
+
+#ploting for the graph of data
+
+#plotting for the graph for optimized parameter
+
+val_c = np.array([np.zeros(data.size,dtype=int)]).transpose()
+val_y = data*1.227+val_c
+plt.scatter(list(data.transpose()), list(val.transpose()), marker='x', color = 'r', label='data points')
+plt.plot(data,val_y, color='r', label='optimized')
+
+#plotting the graph for the samples
+for i in range(1,7):
+    val_ysamp = data*sample['s'+str(i)][-1]+val_c
+    plt.plot(data,val_ysamp, color='b', label='sample'+str(i))
+plt.title("best_fit_line")
+plt.xlabel('x_data')
+plt.ylabel('y_data')
+plt.legend()
+plt.grid(True)
+plt.show()   
