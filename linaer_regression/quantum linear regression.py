@@ -1,21 +1,28 @@
+#importing required modules
+from qiskit import *
+from qiskit.tools.visualization import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-class linaer_regression():
+#creating classical_regression model
+class linear_regression():
     def __init__(self,x,y):
         self.x = x
         self.y = y
-        
+    
+    #partial derivative of m
     def diff_m(self,m,c):
         val_c = np.ones(self.x.size,dtype=int).transpose()*c
         return np.dot(np.array([np.ones(self.x.size,dtype=int)]),2*self.x*(m*self.x+val_c-self.y))[0][0]/len(list(self.x))
     
+    #partial derivative of c
     def diff_c(self,m,c):
         val_c = np.ones(self.x.size,dtype=int).transpose()*c
         return np.dot(np.array([np.ones(self.x.size,dtype=int)]),2*(m*self.x+val_c-self.y))[0][0]/len(list(self.x))
     
-    def gradient_decent(self, n):
-        m = 1.5
+    #naive gradient_decent
+    def gradient_decent(self, n):#n determines the precision of slope of the line
+        m = 1.0
         c = 0.0
         for i in range(n):
             m = m - 0.000005*self.diff_m(m,c)
@@ -30,7 +37,7 @@ val = np.array([[0.5, 1.5, 2.25, 3.0, 3.5, 4.0, 4.75, 5.00, 5.5, 6.0, 6.5, 7.0, 
 line = linear_regression(data,val)
 
 #generating population, where 1.5453 is the optimized value
-theta = {'optimised':2*1.48}
+theta = {'optimised':2*0.889}
 
 #keeping track of samples
 sample = {'s1':[],'s2':[],'s3':[],'s4':[],'s5':[],'s6':[]}
@@ -39,9 +46,8 @@ fitt = {'s1':[],'s2':[],'s3':[],'s4':[],'s5':[],'s6':[]}
 #The population size is 6
 for i in range(1,7):
     m,c = line.gradient_decent(i*10)
-    theta['samp'+str(i-5)] = round(2*np.arctan(round(m,3)),3)    
-    sample['s'+str(i-5)].append(round(np.arctan(round(m,3)),3))
-    
+    theta['samp'+str(i)] = round(2*np.arctan(round(m,3)),3)    
+    sample['s'+str(i)].append((round(m,3)))
     
 #creating quantum genetic sub circuit
 
