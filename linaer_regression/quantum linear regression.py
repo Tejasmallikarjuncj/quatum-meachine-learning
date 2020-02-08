@@ -14,15 +14,14 @@ class linaer_regression():
         val_c = np.ones(self.x.size,dtype=int).transpose()*c
         return np.dot(np.array([np.ones(self.x.size,dtype=int)]),2*(m*self.x+val_c-self.y))[0][0]/len(list(self.x))
     
-    def gradient_decent(self):
+    def gradient_decent(self, n):
         m = 1.5
         c = 0.0
-        flag = 0
-        while flag == 0:
+        for i in range(n):
             m = m - 0.000005*self.diff_m(m,c)
             #c = c - 0.0015*self.diff_c(m,c)
             if self.diff_m(m,c) <= 0.0000001 and self.diff_m(m,c)>= -0.0000001:
-                flag = 1
+                break
         return m,c
 
 #taking data
