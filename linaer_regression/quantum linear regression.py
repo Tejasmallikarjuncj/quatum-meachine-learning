@@ -26,8 +26,8 @@ class linaer_regression():
         return m,c
 
 #taking data
-data = np.array([[i*0.2 for i in range(1,14)]]).transpose()
-val = np.array([[1.0, 4.0, 6.0, 9.0, 11.0, 14.0, 16.0, 19.0, 22.0, 24.0, 27.0, 30.0, 32.0]]).transpose()
+data = np.array([[i*0.5 for i in range(1,14)]]).transpose()
+val = np.array([[0.5, 1.5, 2.25, 3.0, 3.5, 4.0, 4.75, 5.00, 5.5, 6.0, 6.5, 7.0, 7.75]]).transpose()
 line = linear_regression(data,val)
 
 #generating population, where 1.5453 is the optimized value
@@ -92,22 +92,22 @@ for i in range(1,7,2):
         gene_circuit.append(mutation,[qregs[1]])
         gene_circuit.append(mutation,[qregs[2]])
         gene_circuit.append(fittness,[qregs[0],qregs[1],qregs[3]],[cregs[0]])
-        count = execute(gene_circuit,backend=sim,shots=2048).result().get_counts()
+        count = execute(gene_circuit,backend=sim,shots=6000).result().get_counts()
         fitt['s1'].append(count['0001']/sum(list(count.values())))
         gene_circuit.append(new_generation,[qregs[0],qregs[1],qregs[3]])
         gene_circuit.append(fittness,[qregs[0],qregs[2],qregs[4]],[cregs[1]])
-        count_1 = execute(gene_circuit,backend=sim,shots=2048).result().get_counts()
-        fitt['s2'].append((count_1['0010']+count_1['0011'])/sum(list(count_1.values())))
+        count_1 = execute(gene_circuit,backend=sim,shots=6000).result().get_counts()
+        fitt['s2'].append((count_1['0011'])/sum(list(count_1.values())))
         gene_circuit.append(new_generation,[qregs[0],qregs[2],qregs[4]])
 
     gene_circuit.measure([qregs[1],qregs[2]],[cregs[2],cregs[3]])
     count_2 = execute(gene_circuit,backend=sim, shots = 6000).result().get_counts()
-    p1 = (count_2['1110']+count_2['1100']+count_2['1111']+count_2['1001']+count_2['1101']+count_2['1000'])/sum(list(count_2.values()))
-    p2 = (count_2['0111']+count_2['0101']+count_2['1100']+count_2['1111']+count_2['1101']+count_2['0110'])/sum(list(count_2.values()))
-    sample['s'+str(i)].append(np.tan(round(np.arcsin(np.sqrt(p1)),3)))
-    sample['s'+str(i+1)].append(np.tan(round(np.arcsin(np.sqrt(p2)),3)))
+    p1 = (count_2['1100']+count_2['1001']+count_2['1000'])/sum(list(count_2.values()))
+    p2 = (count_2['0101']+count_2['1100']+count_2['0100'])/sum(list(count_2.values()))
+    sample['s'+str(i)].append(round(np.tan(round(np.arcsin(np.sqrt(p1)),3)),3))
+    sample['s'+str(i+1)].append(round(np.tan(round(np.arcsin(np.sqrt(p2)),3)),3))
     gene_circuit.reset(qregs)
     
 #the final optimized sample are
 print("The sample",sample)
-print("the optimium solution", 1.48)
+print("the optimium solution", 0.867)
