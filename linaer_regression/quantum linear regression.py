@@ -70,6 +70,11 @@ fittness_circuit.h(2)
 fittness_circuit.measure([2],[0])
 fittness = fittness_circuit.to_instruction()
 
+#mutation_2 circuit
+mutation_2_circuit = QuantumCircuit(1, name = 'mutation_2')
+mutation_2_circuit.u3(-0.02*(np.pi)/4,0,0,0)
+mutation_2 = mutation_2_circuit.to_instruction()
+
 #new_generation circuit
 gen_circuit = QuantumCircuit(3,name="new_generation")
 gen_circuit.h(2)
@@ -100,10 +105,17 @@ for i in range(1,7,2):
         count = execute(gene_circuit,backend=sim,shots=6000).result().get_counts()
         fitt['s1'].append(count['0001']/sum(list(count.values())))
         gene_circuit.append(new_generation,[qregs[0],qregs[1],qregs[3]])
+        if j >= 2:
+            if fitt['s'+str(i)][-1] > fitt['s'+str(i)][-2]:
+                gene_circuit.append(mutation_2,[qregs[1]])
+        
         gene_circuit.append(fittness,[qregs[0],qregs[2],qregs[4]],[cregs[1]])
         count_1 = execute(gene_circuit,backend=sim,shots=6000).result().get_counts()
         fitt['s2'].append((count_1['0011'])/sum(list(count_1.values())))
         gene_circuit.append(new_generation,[qregs[0],qregs[2],qregs[4]])
+        if j >= 2:
+            if fitt['s'+str(i+1)][-1] > fitt['s'+str(i+1)][-2]:
+                gene_circuit.append(mutation_2,[qregs[1]])
 
     gene_circuit.measure([qregs[1],qregs[2]],[cregs[2],cregs[3]])
     count_2 = execute(gene_circuit,backend=sim, shots = 6000).result().get_counts()
